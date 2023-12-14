@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, inital-scale=1.0">
+        <title>Spaceport Simulation</title>
+
+        <style>
+            body{
+                font-family: Arial, Helvetica, sans-serif;
+                background-color: black;
+                margin: 0;
+                padding: 20px;
+            }
+            #game-container{
+                max-width: 600px;
+                margin: auto;
+                padding: 20px;
+                background-color: darkblue;
+                border: 1px solid yellow;
+                border-radius: 8px;
+            }
+            .ship{
+                border: 1px solid white;
+                margin-bottom: 10px;
+                padding: 10px;
+                border-radius: 4px;
+            }
+            button{
+                padding: 5px 10px;
+                margin-top: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="game-container">
+            <h1>Spaceport Manager</h1>
+            <div id="directions">
+                <p>Welcome to Spaceport Manager! Use this console to keep track of all the ships that you service and to bill their captains.</p>
+                <p>Each time you click on a ship that has been serviced, credits will transfer from the captain of the ship to the Spaceport account.</p>
+            </div>
+            <div id="credits">
+                <h2>Galactic Credits: <Span id="credits-amount">0</Span></h2>
+            </div>
+            <div id="ships-container">
+                <!-- We are going to use javascript to add ships here, this can be done using the id ships-container-->
+
+            </div>
+            
+        </div>
+        <!-- We are leaving HTML and going into javascript-->
+        <script>
+            //create our class for a spaceship
+            class SpaceShip{
+                constructor(name, serviceCost){
+                    this.name = name;
+                    this.serviceCost=serviceCost;
+                }
+                //this is a method, it is a function that is part of a class
+                //this method will service the ship and add credits
+                service(){
+                    game.credits=game.credits+this.serviceCost;
+                    game.updateCreditsDisplay();
+                }
+
+            }
+            //create our game class
+            class Game{
+                constructor(){
+                    this.credits=0;
+                    this.ships=[];
+                }
+                //Create a method to update the credits on the page
+                updateCreditsDisplay(){
+                    document.getElementById("credits-amount").innerText=this.credits;
+                }
+                //create a method to add a ship to the game
+                addShip(ship){
+                    this.ships.push(ship);
+                    this.displayShip(ship);
+                }
+                //create a method to display a ship on the page
+                displayShip(ship){
+                    const container=document.getElementById("ships-container");
+                    const shipDiv=document.createElement("div");
+                    shipDiv.classList.add("ship");
+                    shipDiv.innerHTML="<h2>"+ship.name+"</h2><p>Service Cost: "+ship.serviceCost+" credits";
+                    shipDiv.onclick=function(){
+                        ship.service();
+                    };
+                    container.appendChild(shipDiv);
+                }
+            }
+
+            //Create a new game object instance from our class
+            const game = new Game();
+            //Create a new ship object instance from our class
+            const ships=[
+                new SpaceShip("Millenium Falcon", 100),
+                new SpaceShip("X-Wing", 200),
+                new SpaceShip("Tie Fighter", 300),
+                new SpaceShip("Star Destroyer", 400),
+                new SpaceShip("Battlestar", 500),
+            ];
+
+            //add each ship to the game
+            ships.forEach(ship => game.addShip(ship));
+        </script>
+    </body>
+</html>
